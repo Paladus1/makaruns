@@ -1,0 +1,53 @@
+import sqlite3
+
+# Установление соединения с базой данных
+connection = sqlite3.connect("macarons.db")
+cursor = connection.cursor()  # Создание объекта курсора
+
+# Запрос для создания таблицы, если она не существует
+request = """
+CREATE TABLE IF NOT EXISTS macarons (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(255) NOT NULL,
+    flavor VARCHAR(255),
+    description TEXT,
+    price INTEGER,
+    image VARCHAR(255)
+);
+"""
+cursor.execute(request)  # Выполнение запроса
+
+# Запрос для вставки данных
+insert_request = """
+INSERT INTO macarons (name, flavor, description, price, image)
+VALUES (?, ?, ?, ?, ?);
+"""
+
+# Данные для вставки
+macarons_data = [
+    ("Макарун з полуницею", "Полуниця", "Ніжний десерт з натуральним полуничним смаком.", 150, "macaron1.jpg"),
+    ("Макарун з шоколадом", "Шоколад", "Насичений шоколадний смак з хрусткою скоринкою.", 160, "macaron2.jpg"),
+    ("Макарун з ваніллю", "Ваніль", "Класичний макарун з легким ароматом ванілі.", 140, "macaron3.jpg"),
+    ("Макарун з фісташками", "Фісташки", "Ароматний макарун з кремовою начинкою з фісташок.", 170, "macaron4.jpg"),
+    ("Макарун з лимоном", "Лимон", "Свіжий лимонний смак з легкою кислинкою.", 145, "macaron5.jpg"),
+]
+
+# Вставка данных в таблицу
+for macaron in macarons_data:
+    cursor.execute(insert_request, macaron)
+
+# Сохранение изменений в базе данных
+connection.commit()
+
+# Запрос для извлечения всех данных из таблицы
+cursor.execute("SELECT * FROM macarons")
+
+# Получение всех строк результата
+rows = cursor.fetchall()
+
+# Вывод всех строк
+for row in rows:
+    print(row)
+
+# Закрытие соединения с базой данных
+connection.close()
