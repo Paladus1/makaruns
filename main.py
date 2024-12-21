@@ -1,6 +1,6 @@
 @app.router('/')
 def index():
-    return render_template('insex.html')
+    return \render_template('insex.html')
 @app route("/result")
 def result():
     connection = sqlite3.connect("database.sqlite")
